@@ -53,3 +53,8 @@ is schematic (coast/river/ridge simplified, not survey-accurate).
 No statistics are used. Facts used: 한강 발원지 검룡소(태백), 남한강+북한강이 양평 두물머리에서 합류, 한강은 서해로 흐름, 평창 2018 동계올림픽 / 스케이트·아이스하키·컬링은 강릉,
 대관령은 태백산맥의 고개(영서/영동), 서해 갯벌 vs 동해 모래 해변(조수 간만 차), 경포호 = 석호, 오죽헌 = 율곡 이이 출생지, 영릉(여주) = 세종대왕릉.
 Child voice is never stored in the design; the prototype stores only result text in `localStorage` for the report demo.
+
+## Fact check log (2026-11-05, web search)
+Confirmed against web sources: 2018 동계올림픽 빙상(스케이트·아이스하키)·컬링 경기는 강릉에서 개최 / 경포호는 모래 둑이 바다와 갈라 놓은 석호 /
+검룡소는 한강의 공식 발원지로 인정(1987 국립지리원)되며 다른 설도 있어 문구를 "알려져 있어요"로 표현 / 두물머리(양평)에서 남한강·북한강이 합류 /
+오죽헌은 율곡 이이 출생지로 전해짐(전승) -> "태어난 집으로 알려져 있어요". Not individually searched: 영릉=세종대왕릉(여주), 서해 갯벌·동해 모래(조차), 태백산맥/영서·영동 구분.
