@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>오늘 배운 지도 - 로드스쿨</title>
+<style>
+:root{--bg:#0a111d;--card:#121b2d;--line:#243252;--txt:#e9eff9;--dim:#8a9bb8;--acc:#35d6c2;--acc2:#ffc857;--ok:#5be39b;--bad:#ff9a7a}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--txt);font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:480px;margin:0 auto;padding:18px 16px 40px;display:flex;flex-direction:column;gap:14px}
+.top{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
+.top i{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--acc),#2f8fff)}
+.sim{font-size:12px;font-weight:700;background:var(--acc2);color:#0a111d;padding:2px 8px;border-radius:6px;margin-left:auto}
+h1{font-size:30px;letter-spacing:-.8px;line-height:1.2}
+.sub{color:var(--dim);font-size:15px;margin-top:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px}
+.card h2{font-size:16px;color:var(--dim);margin-bottom:8px}
+.map{padding:0;overflow:hidden;border-radius:18px}.map svg{display:block;width:100%;height:auto}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#17233a;border-radius:14px;padding:10px 8px;text-align:center}.stat b{display:block;font-size:28px;color:var(--acc2)}.stat span{font-size:13px;color:var(--dim)}
+.ep{padding:10px 0;border-top:1px solid var(--line)}.ep:first-of-type{border-top:0}
+.ep .t{font-weight:800;font-size:17px}.ep .m{font-size:13px;color:var(--dim);margin-top:2px}
+.q{font-size:14.5px;margin-top:6px;display:flex;gap:8px;line-height:1.4}.q em{font-style:normal;font-size:12px;font-weight:800;padding:2px 8px;border-radius:7px;white-space:nowrap;height:fit-content}
+.r-correct{background:#173f2d;color:var(--ok)}.r-hint-correct{background:#3b3515;color:var(--acc2)}.r-revealed,.r-skipped{background:#44221b;color:var(--bad)}
+.rev li{font-size:15px;margin:6px 0 0 18px;line-height:1.4}.rev small{color:var(--dim)}
+.go{font-size:16px;line-height:1.5}
+.priv{font-size:12.5px;color:var(--dim);line-height:1.5}
+</style></head>
+<body><main id="m"></main>
+<script type="module" src="js/report.js"></script></body></html>
