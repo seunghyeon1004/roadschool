@@ -69,6 +69,7 @@ function frame() {
     const v = vehicle.snapshot(); fused.getLastLocation();
     safety.update(v, `t=${Math.round(sim.t)}`);
   } else safety.update({ speedKmh: vehicle.getSpeedKmh(), gear: vehicle.getGear() });
+  nativeGovern();
   if (sim.started && sim.playing) engine.tick(ctxFor(cur));
   if (sim.playing && sim.t >= arriveT && !engine.busy && !engine.tripDone) { engine.arrive().then(() => { saveReport(true); }); }
   render();
@@ -81,6 +82,13 @@ setInterval(() => {
   if (sim.playing && sim.t < tl.T) sim.t = Math.min(tl.T, sim.t + dt * sim.ts);
   frame();
 }, 100);
+
+// Android host: the Kotlin SafetyGovernor is authoritative when present (same rules as js/safety.js).
+const NATIVE = window.RoadSchoolNative;
+function nativeGovern() {
+  if (!NATIVE) return;
+  try { const m = NATIVE.updateSafety(vehicle.getSpeedKmh(), vehicle.getGear()); if (m && m !== safety.mode) safety.mode = m; } catch (e) {}
+}
 
 // ---------- invariant: no visual elements while not STOPPED ----------
 let invariantOk = true, invariantChecks = 0;

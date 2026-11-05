@@ -58,3 +58,25 @@ Child voice is never stored in the design; the prototype stores only result text
 Confirmed against web sources: 2018 동계올림픽 빙상(스케이트·아이스하키)·컬링 경기는 강릉에서 개최 / 경포호는 모래 둑이 바다와 갈라 놓은 석호 /
 검룡소는 한강의 공식 발원지로 인정(1987 국립지리원)되며 다른 설도 있어 문구를 "알려져 있어요"로 표현 / 두물머리(양평)에서 남한강·북한강이 합류 /
 오죽헌은 율곡 이이 출생지로 전해짐(전승) -> "태어난 집으로 알려져 있어요". Not individually searched: 영릉=세종대왕릉(여주), 서해 갯벌·동해 모래(조차), 태백산맥/영서·영동 구분.
+
+## Android app (`android/`)
+Kotlin, single `MainActivity` hosting the web prototype from bundled assets (`WebViewAssetLoader`, copied from `../index.html`, `css/`, `js/` at build time),
+minSdk 28 / targetSdk 35 / compileSdk 35. No network, location or microphone permission: every SDK is simulated.
+- `safety/SafetyGovernor.kt` - the 3-level state machine (same thresholds/hysteresis as `js/safety.js`); when running inside the APK the **Kotlin governor is authoritative** (the page calls `RoadSchoolNative.updateSafety(speed, gear)` every frame).
+- `sdk/PleosSdkAdapters.kt` - `VehicleSdk`, `FusedLocationSdk`, `NaviHelperSdk`, `TextToSpeechSdk`, `SpeechToTextSdk` interfaces named after the Pleos SDK modules plus `Sim*` implementations (**simulated**; signatures are assumptions, to be replaced by the official SDK).
+- `sdk/AndroidTts.kt` - platform TTS (Korean) behind `TextToSpeechSdk`, bridged to the page.
+- Unit tests: `app/src/test/.../SafetyGovernorTest.kt` (5 tests incl. a sweep of all speeds x gears with zero violations).
+
+Build (macOS; JDK 17 + Android command-line tools):
+```
+brew install openjdk@17 gradle && brew install --cask android-commandlinetools
+export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home ANDROID_HOME=/opt/homebrew/share/android-commandlinetools
+yes | sdkmanager --licenses && sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+cd android && ./gradlew testDebugUnitTest assembleDebug        # app/build/outputs/apk/debug/app-debug.apk (debug-keystore signed)
+```
+`assembleRelease` signs with `android/keystore.properties` (git-ignored; generate your own with `keytool -genkeypair ...`); without it the release APK is unsigned.
+In the app: scroll to the simulation panel, press **출발 (sim)**; the stage shows the car display, `?view=tablet` is available from the panel.
+
+APKs: `apk/RoadSchool_release.apk` (release-signed with a local, git-ignored keystore; keep `android/roadschool-release.jks` + `keystore.properties` to sign updates) and `apk/RoadSchool_debug.apk`.
+Emulator smoke test (Android 35 arm64 google_apis, 2560x1600): installed, launched, trip started, Kotlin governor reported DRIVING at 110 km/h with the screen off, platform Korean TTS (`ko-KR`) synthesized the lesson; see `apk/emulator_smoke.png`.

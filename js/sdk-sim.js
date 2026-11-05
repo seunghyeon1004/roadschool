@@ -60,6 +60,12 @@ export class TextToSpeech {                             // [SIMULATED] TextToSpe
     return new Promise((resolve) => {
       this._res = resolve;
       const done = () => { clearTimeout(this._timer); this._res = null; resolve(); };
+      const native = window.RoadSchoolNative;           // Android host: platform TTS via the Kotlin bridge
+      if (native && !this.mute) {
+        const id = 'u' + (this._n = (this._n || 0) + 1);
+        window.__ttsDone = (got) => { if (got === id) done(); };
+        try { native.speak(id, text); this._timer = setTimeout(done, est * 3 + 4000); return; } catch (e) { /* fall through */ }
+      }
       const synth = window.speechSynthesis;
       const useVoice = synth && !this.mute;
       const est = Math.max(900, text.length * 105 / (opts.rate || 1)) / this.fast;
@@ -78,7 +84,7 @@ export class TextToSpeech {                             // [SIMULATED] TextToSpe
       this._timer = setTimeout(done, est);
     });
   }
-  stop() { logSdk('TextToSpeech', 'stop()', ''); try { window.speechSynthesis?.cancel(); } catch (e) {} clearTimeout(this._timer); this._res?.(); this._res = null; }
+  stop() { logSdk('TextToSpeech', 'stop()', ''); try { window.RoadSchoolNative?.stopSpeaking(); } catch (e) {} try { window.speechSynthesis?.cancel(); } catch (e) {} clearTimeout(this._timer); this._res?.(); this._res = null; }
 }
 
 export class SpeechToText {                             // [SIMULATED] SpeechToText SDK (utterance injected by dev panel / tablet tap / auto-child)
